@@ -1,0 +1,13 @@
+---
+- name: Check if se layout is available
+  shell: "localectl list-keymaps | grep --fixed-strings --line-regexp se"
+  register: se_keymap_available
+
+- name: Fail if se layout isn't available
+  assert:
+    that:
+      - se_keymap_available.stdout == "se"
+    msg: "keyboard layout 'se' not available"
+
+- name: Change keymap to se
+  shell: "localectl set-keymap se; localectl set-x11-keymap se"
